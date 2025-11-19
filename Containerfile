@@ -11,7 +11,7 @@ COPY build_files /
 
 # Base Image
 FROM ghcr.io/ublue-os/bluefin-nvidia:stable
-COPY --from=kanata /usr/src/kanata/target/release/kanata /usr/local/bin/kanata
+COPY --from=kanata /usr/src/kanata/target/release/kanata /usr/sbin/kanata
 ## Other possible base images include:
 # FROM ghcr.io/ublue-os/bazzite:latest
 # FROM ghcr.io/ublue-os/bluefin-nvidia:stable
