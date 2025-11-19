@@ -1,10 +1,17 @@
-# Allow build scripts to be referenced without being copied into the final image
+FROM rust:1-bookworm AS kanata
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    pkg-config libxkbcommon-dev libudev-dev libinput-dev libevdev-dev \
+    && rm -rf /var/lib/apt/lists/*
+WORKDIR /usr/src/kanata
+RUN git clone https://github.com/jtroo/kanata.git .
+RUN cargo build --release --features cmd
+
 FROM scratch AS ctx
 COPY build_files /
 
 # Base Image
 FROM ghcr.io/ublue-os/bluefin-nvidia:stable
-
+COPY --from=kanata /usr/src/kanata/target/release/kanata /usr/local/bin/kanata
 ## Other possible base images include:
 # FROM ghcr.io/ublue-os/bazzite:latest
 # FROM ghcr.io/ublue-os/bluefin-nvidia:stable
